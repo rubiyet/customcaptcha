@@ -12,6 +12,11 @@ module.exports = {
     extend: {},
     colors: {
       primaryColor: "#1361bb",
+      secondaryColor: "#ffffff",
+      tertiaryColor: "#fbbf24",
+      quaternaryColor: "#f59e0b",
+      quinaryColor: "#f87171",
+      senaryColor: "#ef4444",
     }
   },
   plugins: [],

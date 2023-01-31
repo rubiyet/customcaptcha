@@ -25,16 +25,59 @@ export default function WebCam() {
     setImage(imageSrc);
   }
   return (
-    <div>{image && <Image src={image} alt={"image"} width={cameraWidth} height={cameraHeight} />}
-      {!image && (
-        <Webcam
-          ref={webcamRef}
-          videoConstraints={videoConstraints}
-          width={cameraWidth}
-          height={cameraHeight}
-        />
+    <>
+      {image && (
+        <div className="flex justify-center">
+          <div className="space-y-3">
+            <div className="flex justify-center py-2 px-10 text-3xl font-semibold text-primaryColor">
+              Select ...
+            </div>
+            <Image
+              src={image}
+              alt={"image"}
+              width={cameraWidth}
+              height={cameraHeight}
+            />
+            <div className="flex justify-center space-x-5">
+              <button
+                onClick={() => setImage(undefined)}
+                className="text-lg font-semibold text-secondaryColor uppercase bg-tertiaryColor hover:bg-quaternaryColor rounded-full py-2 px-10"
+              >
+                Validate
+              </button>
+              <button
+                onClick={() => setImage(undefined)}
+                className="text-lg font-semibold text-secondaryColor uppercase bg-quinaryColor hover:bg-senaryColor rounded-full py-2 px-10"
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+        </div>
       )}
-      <button onClick={handleCaptureScreenshot}>Capture photo</button>
-    </div>
+      {!image && (
+        <div className="flex justify-center">
+          <div className="space-y-3">
+            <div className="flex justify-center py-2 px-10 text-3xl font-semibold text-primaryColor">
+              Take Selfie
+            </div>
+            <Webcam
+              ref={webcamRef}
+              videoConstraints={videoConstraints}
+              width={cameraWidth}
+              height={cameraHeight}
+            />
+            <div className="flex justify-center">
+              <button
+                onClick={handleCaptureScreenshot}
+                className="text-lg font-semibold text-secondaryColor uppercase bg-tertiaryColor hover:bg-quaternaryColor rounded-full py-2 px-10"
+              >
+                Continue
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
