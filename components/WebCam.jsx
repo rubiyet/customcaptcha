@@ -25,7 +25,7 @@ export default function WebCam() {
     setImage(imageSrc);
   }
   return (
-    <div>{image && <Image src={image} alt={alt} />}
+    <div>{image && <Image src={image} alt={"image"} width={cameraWidth} height={cameraHeight} />}
       {!image && (
         <Webcam
           ref={webcamRef}
