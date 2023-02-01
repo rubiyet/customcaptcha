@@ -5,20 +5,24 @@ import Lottie from "lottie-react";
 import loadingWebcamAnimation from "../public/loadingWebcamAnimation.json";
 
 export default function WebCam() {
-  const [webcamWidth, setWebcamWidth] = useState(720); //state to store the camera width
-  const [webcamHeight, setWebcamHeight] = useState(360); //state to store the camera height
-  const [webcamAspectRatio, setWebcamAspectRatio] = useState(
-    webcamWidth / webcamHeight
-  ); //state to store the aspect ratio of the camera
+  // const [webcamWidth, setWebcamWidth] = useState(720); //state to store the camera width
+  // const [webcamHeight, setWebcamHeight] = useState(360); //state to store the camera height
+  // const [webcamAspectRatio, setWebcamAspectRatio] = useState(
+  //   webcamWidth / webcamHeight
+  // ); //state to store the aspect ratio of the camera
 
-  const webcamVideoConstraints = {
+  const webcamWidth = 720; //width of the camera
+  const webcamHeight = 360; //height of the camera
+  const aspectRatio = webcamWidth / webcamHeight; //aspect ratio of the camera
+
+  const videoConstraints = {
     width: {
       min: webcamWidth, //minimum width of the camera
     },
     height: {
       min: webcamHeight, //minimum height of the camera
     },
-    aspectRatio: webcamAspectRatio, //aspect ratio of the camera
+    aspectRatio, //aspect ratio of the camera
   };
 
   const webcamRef = useRef(); //reference to the webcam
@@ -153,7 +157,7 @@ export default function WebCam() {
               ></div>
               <Webcam
                 ref={webcamRef} //reference to the webcam
-                videoConstraints={webcamVideoConstraints} //video constraints
+                videoConstraints={videoConstraints} //video constraints
                 width={webcamWidth} //camera width
                 height={webcamHeight} //camera height
               />
