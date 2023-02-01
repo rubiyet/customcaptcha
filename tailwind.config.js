@@ -17,6 +17,7 @@ module.exports = {
       quaternaryColor: "#f59e0b",
       quinaryColor: "#f87171",
       senaryColor: "#ef4444",
+      borderColor: "#ffffff",
     }
   },
   plugins: [],
