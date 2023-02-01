@@ -5,27 +5,26 @@ import Lottie from "lottie-react";
 import loadingWebcamAnimation from "../public/loadingWebcamAnimation.json";
 
 export default function WebCam() {
-  // const [webcamWidth, setWebcamWidth] = useState(720); //state to store the camera width
-  // const [webcamHeight, setWebcamHeight] = useState(360); //state to store the camera height
-  // const [webcamAspectRatio, setWebcamAspectRatio] = useState(
-  //   webcamWidth / webcamHeight
-  // ); //state to store the aspect ratio of the camera
+  const [webcamWidth, setWebcamWidth] = useState(720); //state to store the camera width
+  const [webcamHeight, setWebcamHeight] = useState(360); //state to store the camera height
+  const [webcamAspectRatio, setWebcamAspectRatio] = useState(
+    webcamWidth / webcamHeight
+  ); //state to store the aspect ratio of the camera
 
-  const webcamWidth = 720; //width of the camera
-  const webcamHeight = 360; //height of the camera
-  const aspectRatio = webcamWidth / webcamHeight; //aspect ratio of the camera
-
-  const videoConstraints = {
+  const webcamVideoConstraints = {
     width: {
       min: webcamWidth, //minimum width of the camera
     },
     height: {
       min: webcamHeight, //minimum height of the camera
     },
-    aspectRatio, //aspect ratio of the camera
+    aspectRatio: webcamAspectRatio, //aspect ratio of the camera
   };
 
   const webcamRef = useRef(); //reference to the webcam
+  const webcamDiv = useRef(null); //reference to the webcam div
+  const [width, setWidth] = useState(0); //state to store the width of the webcam div
+  const [height, setHeight] = useState(0); //state to store the height of the webcam div
   const [image, setImage] = useState(); //state to store the image
   const [unlockSquareStyle, setUnlockSquareStyle] = useState({}); //state to store the style of the unlockSquare
   const [lockedSquareStyle, setLockedSquareStyle] = useState({}); //state to store the style of the lockedSquare
@@ -34,6 +33,25 @@ export default function WebCam() {
   const [captured, setCaptured] = useState(false); //state to store the captured value
   const [lockedSquareLocation, setLockedSquareLocation] = useState(); //state to store the location of the webcam
   const [loadingWebcam, setLoadingWebcam] = useState(false); //state to store the loadingWebcam value
+
+  useLayoutEffect(() => {
+    if (webcamDiv.current) {
+      setWidth(webcamDiv.current.offsetWidth); //set the width of the webcam div
+      setHeight(webcamDiv.current.offsetHeight); //set the height of the webcam div
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(webcamDiv.current.offsetWidth); //set the width of the webcam div
+      setHeight(webcamDiv.current.offsetHeight); //set the height of the webcam div
+    };
+    window.addEventListener("resize", handleResize); //add event listener to the window
+
+    return () => {
+      window.removeEventListener("resize", handleResize); //remove event listener from the window
+    };
+  }, []);
 
   useEffect(() => {
     //useEffect to set the style of the unlockSquare
@@ -150,19 +168,26 @@ export default function WebCam() {
               {/* loading animation */}
             </div>
             {/* webcam */}
-            <div className={` relative ${loadingWebcam ? "block" : "hidden"}`}>
+            <div
+              ref={webcamDiv}
+              className={` relative ${loadingWebcam ? "block" : "hidden"}`}
+            >
               <div
                 style={unlockSquareStyle}
                 className="w-24 h-24 md:w-52 md:h-52 border-2 border-borderColor"
               ></div>
               <Webcam
                 ref={webcamRef} //reference to the webcam
-                videoConstraints={videoConstraints} //video constraints
+                videoConstraints={webcamVideoConstraints} //video constraints
                 width={webcamWidth} //camera width
                 height={webcamHeight} //camera height
               />
             </div>
-            <div className={`flex justify-center ${loadingWebcam ? "block" : "hidden"}`}>
+            <div
+              className={`flex justify-center ${
+                loadingWebcam ? "block" : "hidden"
+              }`}
+            >
               {/* button to capture the screenshot */}
               <button
                 onClick={handleCaptureScreenshot}
