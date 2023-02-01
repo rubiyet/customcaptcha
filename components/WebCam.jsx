@@ -146,7 +146,7 @@ export default function WebCam() {
               {/* loading animation */}
             </div>
             {/* webcam */}
-            <div className={` relative space-y-3 ${loadingWebcam ? "block" : "hidden"}`}>
+            <div className={` relative ${loadingWebcam ? "block" : "hidden"}`}>
               <div
                 style={unlockSquareStyle}
                 className="w-24 h-24 md:w-52 md:h-52 border-2 border-borderColor"
@@ -157,15 +157,15 @@ export default function WebCam() {
                 width={webcamWidth} //camera width
                 height={webcamHeight} //camera height
               />
-              <div className="flex justify-center">
-                {/* button to capture the screenshot */}
-                <button
-                  onClick={handleCaptureScreenshot}
-                  className="text-lg font-semibold text-secondaryColor uppercase bg-tertiaryColor hover:bg-quaternaryColor rounded-full py-2 px-10"
-                >
-                  Continue
-                </button>
-              </div>
+            </div>
+            <div className={`flex justify-center ${loadingWebcam ? "block" : "hidden"}`}>
+              {/* button to capture the screenshot */}
+              <button
+                onClick={handleCaptureScreenshot}
+                className="text-lg font-semibold text-secondaryColor uppercase bg-tertiaryColor hover:bg-quaternaryColor rounded-full py-2 px-10"
+              >
+                Continue
+              </button>
             </div>
           </div>
         </div>
