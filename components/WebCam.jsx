@@ -5,103 +5,83 @@ import Lottie from "lottie-react";
 import loadingWebcamAnimation from "../public/loadingWebcamAnimation.json";
 
 export default function WebCam() {
-  const cameraWidth = 720; //camera width in pixels for the webcam
-  const cameraHeight = 360; //camera height in pixels for the webcam
-  const aspectRatio = cameraWidth / cameraHeight; //aspect ratio of the camera
+  const [webcamWidth, setWebcamWidth] = useState(720); //state to store the camera width
+  const [webcamHeight, setWebcamHeight] = useState(360); //state to store the camera height
+  const [webcamAspectRatio, setWebcamAspectRatio] = useState(
+    webcamWidth / webcamHeight
+  ); //state to store the aspect ratio of the camera
 
-  const videoConstraints = {
+  const webcamVideoConstraints = {
     width: {
-      min: cameraWidth, //minimum width of the camera
+      min: webcamWidth, //minimum width of the camera
     },
     height: {
-      min: cameraHeight, //minimum height of the camera
+      min: webcamHeight, //minimum height of the camera
     },
-    aspectRatio, //aspect ratio of the camera
+    aspectRatio: webcamAspectRatio, //aspect ratio of the camera
   };
+
   const webcamRef = useRef(); //reference to the webcam
-  const webcamDiv = useRef(null); //reference to the webcam div
-  const [width, setWidth] = useState(0); //state to store the width of the webcam div
-  const [height, setHeight] = useState(0); //state to store the height of the webcam div
-
-  useLayoutEffect(() => {
-    if (webcamDiv.current) {
-    setWidth(webcamDiv.current.offsetWidth); //set the width of the webcam div
-    setHeight(webcamDiv.current.offsetHeight); //set the height of the webcam div
-    }
-  }, []);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setWidth(webcamDiv.current.offsetWidth); //set the width of the webcam div
-      setHeight(webcamDiv.current.offsetHeight); //set the height of the webcam div
-    };
-    window.addEventListener("resize", handleResize); //add event listener to the window
-
-    return () => {
-      window.removeEventListener("resize", handleResize); //remove event listener from the window
-    };
-  }, []);
-
   const [image, setImage] = useState(); //state to store the image
-
-  const [style, setStyle] = useState({}); //state to store the style of the webcam
-  const [lockedStyle, setLockedStyle] = useState({}); //state to store the style of the webcam
-  const [randomTop, setRandomTop] = useState(0); //state to store the random top value
-  const [randomLeft, setRandomLeft] = useState(0); //state to store the random left value
+  const [unlockSquareStyle, setUnlockSquareStyle] = useState({}); //state to store the style of the unlockSquare
+  const [lockedSquareStyle, setLockedSquareStyle] = useState({}); //state to store the style of the lockedSquare
+  const [unlockSquareRandomTop, setUnlockSquareRandomTop] = useState(0); //state to store the random top value
+  const [unlockSquareRandomLeft, setUnlockSquareRandomLeft] = useState(0); //state to store the random left value
   const [captured, setCaptured] = useState(false); //state to store the captured value
-  const [location, setLocation] = useState(); //state to store the location of the webcam
-  
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      if (!captured){
-        setRandomTop(Math.floor(Math.random() * 40));
-        setRandomLeft(Math.floor(Math.random() * 65));
-        setLocation({top: randomTop, left: randomLeft})
-      }
-      setStyle({
-        position: "absolute",
-        top: `${randomTop}%`,
-        left: `${randomLeft}%`,
-        transition: "all 1s ease-linear",
-      });
-    }, 3000);
+  const [lockedSquareLocation, setLockedSquareLocation] = useState(); //state to store the location of the webcam
+  const [loadingWebcam, setLoadingWebcam] = useState(false); //state to store the loadingWebcam value
 
-    return () => clearInterval(intervalId);
-  }, [randomTop, randomLeft, captured, location]);
+  useEffect(() => {
+    //useEffect to set the style of the unlockSquare
+    const squareInterval = setInterval(() => {
+      if (!captured) {
+        setUnlockSquareRandomTop(Math.floor(Math.random() * 40)); //generate a random top value for the unlockSquare
+        setUnlockSquareRandomLeft(Math.floor(Math.random() * 65)); //generate a random left value for the unlockSquare
+        setLockedSquareLocation({
+          top: unlockSquareRandomTop,
+          left: unlockSquareRandomLeft,
+        }); //set the location of the lockedSquare
+      }
+      setUnlockSquareStyle({
+        position: "absolute", //position of the unlockSquare
+        top: `${unlockSquareRandomTop}%`, //top value of the unlockSquare
+        left: `${unlockSquareRandomLeft}%`, //left value of the unlockSquare
+        transition: "all 1s ease-linear", //transition of the unlockSquare
+      });
+    }, 3000); //set the interval to 3 seconds
+
+    return () => clearInterval(squareInterval); //clear the interval
+  }, [captured, unlockSquareRandomTop, unlockSquareRandomLeft]); //dependencies
 
   {
     /* handleCaptureScreenshot function to capture the screenshot of the webcam */
   }
   function handleCaptureScreenshot() {
-    setCaptured(true);
-    setLockedStyle({
-      position: "absolute",
-      top: `${location.top}%`,
-      left: `${location.left}%`
+    setCaptured(false); //set the captured state to false
+    setCaptured(true); //set the captured state to true
+    setLockedSquareStyle({
+      //set the style of the lockedSquare
+      position: "absolute", //position of the lockedSquare
+      top: `${lockedSquareLocation.top}%`, //top value of the lockedSquare
+      left: `${lockedSquareLocation.left}%`, //left value of the lockedSquare
     });
     const imageSrc = webcamRef.current.getScreenshot(); //get the screenshot of the webcam
     setImage(imageSrc); //set the image state
-    console.log(webcamRef.current.video.videoWidth); //width of the video
-    console.log(randomTop, randomLeft);
   }
 
-  const reset = () => {
-    setCaptured(false);
-    setImage(undefined);
-  };
-
-  const [loadingWebcam, setLoadingWebcam] = useState(false)
-  
+  //useEffect to set the loadingWebcam state to true after 5 seconds
   useEffect(() => {
     setInterval(() => {
-      setLoadingWebcam(true)
-    }, 3000);
-  }, [])
+      setLoadingWebcam(true); //set the loadingWebcam state to true
+    }, 5000);
+  }, []);
 
-  const handleUserMedia = () => {
-    console.log(webcamRef.current.stream)
-  }
-
+  //reset function to reset the image
+  const reset = () => {
+    setCaptured(false); //set the captured state to false
+    setImage(undefined); //set the image state to undefined
+    setLoadingWebcam(false); //set the loadingWebcam state to false
+  };
 
   return (
     <>
@@ -115,15 +95,15 @@ export default function WebCam() {
             </div>
             <div className="relative">
               <div
-                style={lockedStyle}
+                style={lockedSquareStyle}
                 className="w-24 h-24 md:w-52 md:h-52 border-2 border-borderColor"
               ></div>
               {/* image preview */}
               <Image
                 src={image} //image source
                 alt={"image"} //image alt
-                width={cameraWidth} //image width
-                height={cameraHeight} //image height
+                width={webcamWidth} //image width
+                height={webcamHeight} //image height
               />
             </div>
             <div className="flex justify-center space-x-5">
@@ -151,23 +131,34 @@ export default function WebCam() {
           <div className="space-y-3">
             {/* Title*/}
             <div className="flex justify-center py-2 px-10 text-3xl font-semibold text-primaryColor">
-              Take Selfie ({width} x {height})
+              Take Selfie
             </div>
-            <div className={`flex justify-center relative ${loadingWebcam ? "hidden" : "block"}`}><Lottie animationData={loadingWebcamAnimation} loop={true} className="w-40 h-40 sm:w-56 sm:h-56 md:w-80 md:h-80" /></div>
+            <div
+              className={`flex justify-center relative ${
+                loadingWebcam ? "hidden" : "block"
+              }`}
+            >
+              <Lottie
+                animationData={loadingWebcamAnimation}
+                loop={true}
+                className="w-40 h-40 sm:w-56 sm:h-56 md:w-80 md:h-80"
+              />
+              {/* loading animation */}
+            </div>
             {/* webcam */}
-            <div ref={webcamDiv} className={` relative ${loadingWebcam ? "block" : "hidden"}`}>
+            <div className={` relative ${loadingWebcam ? "block" : "hidden"}`}>
               <div
-                style={style}
+                style={unlockSquareStyle}
                 className="w-24 h-24 md:w-52 md:h-52 border-2 border-borderColor"
               ></div>
               <Webcam
                 ref={webcamRef} //reference to the webcam
-                videoConstraints={videoConstraints} //video constraints
-                width={cameraWidth} //camera width
-                height={cameraHeight} //camera height
+                videoConstraints={webcamVideoConstraints} //video constraints
+                width={webcamWidth} //camera width
+                height={webcamHeight} //camera height
               />
             </div>
-            <div className="flex justify-center">
+            <div className={`flex justify-center ${loadingWebcam ? "block" : "hidden"}`}>
               {/* button to capture the screenshot */}
               <button
                 onClick={handleCaptureScreenshot}
