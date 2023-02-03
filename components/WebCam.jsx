@@ -3,6 +3,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Lottie from "lottie-react";
 import loadingWebcamAnimation from "../public/loadingWebcamAnimation.json";
+import SquareSector from "./SquareSector";
 
 export default function WebCam() {
   const [webcamWidth, setWebcamWidth] = useState(720); //state to store the camera width
@@ -76,12 +77,33 @@ export default function WebCam() {
     }, 5000);
   }, []);
 
-  //reset function to reset the image
-  const reset = () => {
-    setCaptured(false); //set the captured state to false
-    setImage(undefined); //set the image state to undefined
-    setLoadingWebcam(false); //set the loadingWebcam state to false
+  const [choiceStore, setChoiceStore] = useState(); //state to store the choices
+  
+  const pull_data = (data) => {
+    // console.log(data); // LOGS DATA FROM CHILD (My name is Dean Winchester... &)
+    setChoiceStore(data); //set the choiceStore state
+  }
+
+  const [validation, setValidation] = useState(false); //state to store the validation value
+  const [validated, setValidated] = useState(); //state to store the validated value
+
+  const validate = () => {
+    setValidation(true); //set the validated state to true
   };
+
+  const validationData = (data) => {
+    setValidated(data); //set the validation state
+    console.log(validated); // LOGS DATA FROM CHILD (My name is Dean Winchester... &)
+  }
+
+    //reset function to reset the image
+    const reset = () => {
+      setCaptured(false); //set the captured state to false
+      setImage(undefined); //set the image state to undefined
+      setLoadingWebcam(false); //set the loadingWebcam state to false
+      setValidation(false); //set the validation state to false
+      setValidated(''); //set the validated state to undefined
+    };
 
   return (
     <>
@@ -90,14 +112,68 @@ export default function WebCam() {
         <div className="flex justify-center">
           <div className="space-y-3">
             {/* Title*/}
-            <div className="flex justify-center py-2 px-10 text-3xl font-semibold text-primaryColor">
-              Select ...
+            <div className="flex justify-center py-2 px-10 text-sm h-8 font-semibold text-primaryColor space-x-5">
+              {validated === true ? "Validated" : null}
+              {validated === false ? "Not Validated" : null}
+              {!validation &&
+                <div className="flex items-center space-x-5">
+            <span >Select :</span>
+              {choiceStore?.map((choice, index) => {
+                <div key={index}>{choice.shape}: {choice.count}</div>
+                if (choice.shape.split('-')[0] === 'triangle') {
+                  return <div key={index} className="flex items-center space-x-2">
+                   <span className="text-lg">{choice.count}</span>
+                  <div
+                  className={`text-secondaryColor text-opacity-0 w-0 h-0 border-solid  border-l-12 border-r-12 border-b-20 border-opacity-60 ${
+                    choice.shape.split('-')[1] === "red"
+                      ? " border-b-red"
+                      : choice.shape.split('-')[1] ===
+                        "green"
+                      ? " border-b-green"
+                      : " border-b-blue"
+                  }`}
+                ></div> 
+                </div>
+                } else if (choice.shape.split('-')[0] === 'circle') {
+                  return <div key={index} className="flex items-center space-x-2">
+                    <span className="text-lg">{choice.count}</span>
+                <div
+                  className={`w-5 h-5 rounded-full bg-opacity-60 ${
+                    choice.shape.split('-')[1] === "red"
+                      ? " bg-red"
+                      : choice.shape.split('-')[1] ===
+                        "green"
+                      ? " bg-green"
+                      : " bg-blue"
+                  }`}
+                ></div>
+                </div>
+                } else if (choice.shape.split('-')[0] === 'square') {
+                  return <div key={index} className="flex items-center space-x-2">
+                    <span className="text-lg">{choice.count}</span>
+                    <div
+                  className={`w-5 h-5 bg-opacity-60 ${
+                    choice.shape.split('-')[1] === "red"
+                      ? " bg-red"
+                      : choice.shape.split('-')[1] ===
+                        "green"
+                      ? " bg-green"
+                      : " bg-blue"
+                  }`}
+                ></div>
+                </div>
+                }
+              })}
+              </div>
+              }
             </div>
             <div className="relative">
               <div
                 style={lockedSquareStyle}
-                className="w-24 h-24 md:w-52 md:h-52 border-2 border-borderColor"
-              ></div>
+                className="w-24 h-24 md:w-52 md:h-52 border border-borderColor border-opacity-40"
+              >
+                <SquareSector captured={captured} func={pull_data} validation={validation} validationData={validationData} /> {/* component to show the square sector */}
+              </div>
               {/* image preview */}
               <Image
                 src={image} //image source
@@ -109,7 +185,7 @@ export default function WebCam() {
             <div className="flex justify-center space-x-5">
               {/* buttons to validate the image */}
               <button
-                onClick={reset}
+                onClick={validate}
                 className="text-lg font-semibold text-secondaryColor uppercase bg-tertiaryColor hover:bg-quaternaryColor rounded-full py-2 px-10"
               >
                 Validate
@@ -130,7 +206,7 @@ export default function WebCam() {
         <div className="flex justify-center">
           <div className="space-y-3">
             {/* Title*/}
-            <div className="flex justify-center py-2 px-10 text-3xl font-semibold text-primaryColor">
+            <div className="flex justify-center py-2 px-10 text-sm h-8 font-semibold text-primaryColor">
               Take Selfie
             </div>
             <div
@@ -149,7 +225,7 @@ export default function WebCam() {
             <div className={` relative ${loadingWebcam ? "block" : "hidden"}`}>
               <div
                 style={unlockSquareStyle}
-                className="w-24 h-24 md:w-52 md:h-52 border-2 border-borderColor"
+                className="w-24 h-24 md:w-52 md:h-52 border-2 border-borderColor border-opacity-40"
               ></div>
               <Webcam
                 ref={webcamRef} //reference to the webcam
@@ -158,7 +234,11 @@ export default function WebCam() {
                 height={webcamHeight} //camera height
               />
             </div>
-            <div className={`flex justify-center ${loadingWebcam ? "block" : "hidden"}`}>
+            <div
+              className={`flex justify-center ${
+                loadingWebcam ? "block" : "hidden"
+              }`}
+            >
               {/* button to capture the screenshot */}
               <button
                 onClick={handleCaptureScreenshot}

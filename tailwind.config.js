@@ -18,7 +18,21 @@ module.exports = {
       quinaryColor: "#f87171",
       senaryColor: "#ef4444",
       borderColor: "#ffffff",
-    }
+      red: "#ef4444",
+      green: "#10b981",
+      blue: "#3b82f6",
+    },
+    borderWidth: {
+      DEFAULT: "1px",
+      0: "0",
+      2: "2px",
+      4: "4px",
+      8: "8px",
+      12: "12px",
+      14: "14px",
+      16: "16px",
+      20: "20px",
+    },
   },
   plugins: [],
 }
