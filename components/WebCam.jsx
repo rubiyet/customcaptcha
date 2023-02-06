@@ -3,7 +3,10 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Lottie from "lottie-react";
 import loadingWebcamAnimation from "../public/loadingWebcamAnimation.json";
+import lockedAnimation from "../public/lockedAnimation.json";
+import validatedAnimation from "../public/validatedAnimation.json";
 import SquareSector from "./SquareSector";
+import style from "../styles/WebCam.module.css";
 
 export default function WebCam() {
   const [webcamWidth, setWebcamWidth] = useState(720); //state to store the camera width
@@ -49,7 +52,7 @@ export default function WebCam() {
         left: `${unlockSquareRandomLeft}%`, //left value of the unlockSquare
         transition: "all 1s ease-linear", //transition of the unlockSquare
       });
-    }, 3000); //set the interval to 3 seconds
+    }, 500); //set the interval to 2 seconds
 
     return () => clearInterval(squareInterval); //clear the interval
   }, [captured, unlockSquareRandomTop, unlockSquareRandomLeft]); //dependencies
@@ -85,88 +88,113 @@ export default function WebCam() {
   }
 
   const [validation, setValidation] = useState(false); //state to store the validation value
-  const [validated, setValidated] = useState(); //state to store the validated value
+  const [validated, setValidated] = useState(false); //state to store the validated value
+  const [notValidated, setNotValidated] = useState(false); //state to store the notValidated value
+  const [blocked, setBlocked] = useState(false); //state to store the blocked value
 
   const validate = () => {
     setValidation(true); //set the validated state to true
+    setValidated(false); //set the validated state to false
   };
 
   const validationData = (data) => {
-    setValidated(data); //set the validation state
-    console.log(validated); // LOGS DATA FROM CHILD (My name is Dean Winchester... &)
+    setValidation(false); //set the validation state to false
+    data === true ? setValidated(true) : setNotValidated(true); //set the notValidated state
+    data === "blocked" && setBlocked(true); //set the blocked state
   }
 
     //reset function to reset the image
     const reset = () => {
+      setBlocked(false); //set the blocked state to false
       setCaptured(false); //set the captured state to false
       setImage(undefined); //set the image state to undefined
       setLoadingWebcam(false); //set the loadingWebcam state to false
       setValidation(false); //set the validation state to false
-      setValidated(''); //set the validated state to undefined
+      setValidated(false); //set the validated state to undefined
+      setNotValidated(false); //set the notValidated state to undefined
     };
 
+    useEffect(() => {
+      //if current time ===  or grater than localStorage blockTo time, then set the blocked state to false
+      //if localStorage.getItem("blockTo") is exist, then set the blocked state to true
+      const currentTime = new Date().getTime();
+      console.log(currentTime);
+      if (localStorage.getItem("blockedTo") !== null) {
+          console.log("l", new Date(localStorage.getItem("blockedTo")).getTime());
+          //localStorage.getItem("blockedTo") to getTime() to get the time in milliseconds
+          if (currentTime >= new Date(localStorage.getItem("blockedTo")).getTime()) {
+            setBlocked(false);
+          } else {
+            setBlocked(true);
+          }
+      }
+      console.log((new Date(localStorage.getItem("blockedTo")).getTime() - currentTime) / 1000);
+    }, []);
+
+  const numberToWords = (number) => {
+    //function to convert number to words
+    const words = [
+      "one",
+      "two",
+      "three",
+      "four",
+      "five",
+      "six",
+      "seven",
+      "eight" ]
+
+    return words[number - 1];
+  };
+
+    
   return (
     <>
       {/* if image is not undefined then show the image */}
       {image && (
         <div className="flex justify-center">
-          <div className="space-y-3">
+          <div>
             {/* Title*/}
-            <div className="flex justify-center py-2 px-10 text-sm h-8 font-semibold text-primaryColor space-x-5">
-              {validated === true ? "Validated" : null}
-              {validated === false ? "Not Validated" : null}
-              {!validation &&
-                <div className="flex items-center space-x-5">
-            <span >Select :</span>
-              {choiceStore?.map((choice, index) => {
-                <div key={index}>{choice.shape}: {choice.count}</div>
-                if (choice.shape.split('-')[0] === 'triangle') {
-                  return <div key={index} className="flex items-center space-x-2">
-                   <span className="text-lg">{choice.count}</span>
-                  <div
-                  className={`text-secondaryColor text-opacity-0 w-0 h-0 border-solid  border-l-12 border-r-12 border-b-20 border-opacity-60 ${
-                    choice.shape.split('-')[1] === "red"
-                      ? " border-b-red"
-                      : choice.shape.split('-')[1] ===
-                        "green"
-                      ? " border-b-green"
-                      : " border-b-blue"
-                  }`}
-                ></div> 
-                </div>
-                } else if (choice.shape.split('-')[0] === 'circle') {
-                  return <div key={index} className="flex items-center space-x-2">
-                    <span className="text-lg">{choice.count}</span>
-                <div
-                  className={`w-5 h-5 rounded-full bg-opacity-60 ${
-                    choice.shape.split('-')[1] === "red"
-                      ? " bg-red"
-                      : choice.shape.split('-')[1] ===
-                        "green"
-                      ? " bg-green"
-                      : " bg-blue"
-                  }`}
-                ></div>
-                </div>
-                } else if (choice.shape.split('-')[0] === 'square') {
-                  return <div key={index} className="flex items-center space-x-2">
-                    <span className="text-lg">{choice.count}</span>
-                    <div
-                  className={`w-5 h-5 bg-opacity-60 ${
-                    choice.shape.split('-')[1] === "red"
-                      ? " bg-red"
-                      : choice.shape.split('-')[1] ===
-                        "green"
-                      ? " bg-green"
-                      : " bg-blue"
-                  }`}
-                ></div>
-                </div>
-                }
-              })}
-              </div>
+              {notValidated && !validated && !blocked && <div className="flex items-center justify-center text-blockedColor font-semibold text-xl h-10">You selected some wrong shapes.</div>}
+            <div className="flex items-center justify-center py-2 px-10 text-sm h-10 font-semibold text-primaryColor space-x-5">
+              {validated === false && blocked === false &&
+                  <div className="flex items-center justify-center space-x-1 text-md h-10">
+            <span >Please Select </span>
+            <div className="flex items-center space-x-1">
+              {choiceStore?.map((choice, index) => (
+                <div key={index}>{index === choiceStore.length - 1 ? <span>and {numberToWords(choice.count)} {choice.shape.split('-')[1]} {choice.count > 1 ? choice.shape.split('-')[0] + 's' : choice.shape.split('-')[0]}</span> : <span>{numberToWords(choice.count)} {choice.shape.split('-')[1]} {choice.count > 1 ? choice.shape.split('-')[0] + 's' : choice.shape.split('-')[0]},</span>}</div>
+              ))}
+            </div>
+            </div>
               }
             </div>
+            <div className="flex justify-center">
+            {!blocked && validated && <div><Lottie
+                animationData={validatedAnimation}
+                loop={false}
+                className="w-48 h-48 sm:w-64 sm:h-64 md:w-96 md:h-96"
+              /> <div className="flex items-center justify-center text-validatedColor font-semibold text-xl h-10">Welcome, You are Validated.</div>
+              <div className={`${style.confetti} w-full`}>
+    <div class={`${style.confettiPiece}`}></div>
+    <div class={`${style.confettiPiece}`}></div>
+    <div class={`${style.confettiPiece}`}></div>
+    <div class={`${style.confettiPiece}`}></div>
+    <div class={`${style.confettiPiece}`}></div>
+    <div class={`${style.confettiPiece}`}></div>
+    <div class={`${style.confettiPiece}`}></div>
+    <div class={`${style.confettiPiece}`}></div>
+    <div class={`${style.confettiPiece}`}></div>
+    <div class={`${style.confettiPiece}`}></div>
+    <div class={`${style.confettiPiece}`}></div>
+    <div class={`${style.confettiPiece}`}></div>
+    <div class={`${style.confettiPiece}`}></div>
+</div>
+</div> }
+            {blocked && !validated && <div><div className="flex items-center justify-center"><Lottie
+                animationData={lockedAnimation}
+                loop={false}
+                className="w-48 h-48 sm:w-64 sm:h-64 md:w-96 md:h-96"
+              /></div><div className="flex items-center justify-center text-blockedColor text-opacity-80 font-semibold text-xl h-10">We declare you as a robot. Come back after 2 minutes when your humanity is restored.</div></div> } </div>
+              {!blocked && !validated && <div className="space-y-3"><div className="flex justify-center">
             <div className="relative">
               <div
                 style={lockedSquareStyle}
@@ -180,49 +208,53 @@ export default function WebCam() {
                 alt={"image"} //image alt
                 width={webcamWidth} //image width
                 height={webcamHeight} //image height
-              />
-            </div>
-            <div className="flex justify-center space-x-5">
+              /></div></div>
+                          <div className="flex justify-center">
               {/* buttons to validate the image */}
+              {blocked && validated &&
               <button
                 onClick={validate}
                 className="text-lg font-semibold text-secondaryColor uppercase bg-tertiaryColor hover:bg-quaternaryColor rounded-full py-2 px-10"
               >
                 Validate
-              </button>
+              </button> } 
               {/* buttons to reset the image */}
+              {!blocked && !validated && <div className="space-x-5">
+                <button
+                onClick={validate}
+                className="text-lg font-semibold text-secondaryColor uppercase bg-tertiaryColor hover:bg-quaternaryColor rounded-full py-2 px-10"
+              >
+                Validate
+              </button>
               <button
                 onClick={reset}
                 className="text-lg font-semibold text-secondaryColor uppercase bg-quinaryColor hover:bg-senaryColor rounded-full py-2 px-10"
               >
                 Reset
-              </button>
+              </button> </div>}
             </div>
+            </div> }
           </div>
         </div>
       )}
       {/* if image is undefined then show the webcam */}
       {!image && (
         <div className="flex justify-center">
-          <div className="space-y-3">
-            {/* Title*/}
-            <div className="flex justify-center py-2 px-10 text-sm h-8 font-semibold text-primaryColor">
-              Take Selfie
+                                {blocked && <div><div className="flex items-center justify-center text-blockedColor font-semibold text-lg h-8">We declare you as a robot. Come back after 2 minutes when your humanity is restored.</div>
+                                <div className="flex justify-center"><Lottie
+                animationData={lockedAnimation}
+                loop={false}
+                className="w-48 h-48 sm:w-64 sm:h-64 md:w-96 md:h-96"
+              /></div></div> } 
+              {!blocked &&
+        <div className="">
+                      {/* Title*/}
+                      <div className="flex items-center justify-center text-primaryColor font-semibold text-xl h-10">
+              Show your face to prove that you are not a robot 😜
             </div>
-            <div
-              className={`flex justify-center relative ${
-                loadingWebcam ? "hidden" : "block"
-              }`}
-            >
-              <Lottie
-                animationData={loadingWebcamAnimation}
-                loop={true}
-                className="w-40 h-40 sm:w-56 sm:h-56 md:w-80 md:h-80"
-              />
-              {/* loading animation */}
-            </div>
-            {/* webcam */}
-            <div className={` relative ${loadingWebcam ? "block" : "hidden"}`}>
+          <div className="space-y-2">
+            {loadingWebcam ? ( <div className="space-y-3">
+            <div className={`relative`}>
               <div
                 style={unlockSquareStyle}
                 className="w-24 h-24 md:w-52 md:h-52 border-2 border-borderColor border-opacity-40"
@@ -246,8 +278,19 @@ export default function WebCam() {
               >
                 Continue
               </button>
-            </div>
+            </div></div> ) : (
+                          <div
+                          className={`flex justify-center relative`}
+                        >
+                          <Lottie
+                            animationData={loadingWebcamAnimation}
+                            loop={true}
+                            className="w-40 h-40 sm:w-56 sm:h-56 md:w-80 md:h-80"
+                          />
+                          {/* loading animation */}
+                        </div> )}
           </div>
+        </div> }
         </div>
       )}
     </>

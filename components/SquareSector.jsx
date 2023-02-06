@@ -24,6 +24,9 @@ export default function SquareSector({ captured, func, validation,validationData
         const shapeColor = ["red", "green", "blue"]; //shapeColor array
         const randomShapeColor = Math.floor(Math.random() * shapeColor.length); //random shapeColor selection from shapeColor array
         const randomColor = shapeColor[randomShapeColor]; //random shapeColor selection from shapeColor array
+        const randomAngle = [12, 45, 90, 180]; //randomAngle array
+        const randomAngleSelection = Math.floor(Math.random() * randomAngle.length); //random angle selection from randomAngle array
+        const randomAngleValue = randomAngle[randomAngleSelection]; //random angle selection from randomAngle array
 
         {/* ramdom key selection from 0 to 24 when key is already exist in dataArr array */}
         while (dataArr.some((item) => item.key === randomKey)) {
@@ -31,63 +34,151 @@ export default function SquareSector({ captured, func, validation,validationData
         }
         setDataArr([
           ...dataArr,
-          { key: randomKey, shape: randomShape, color: randomColor },
+          { key: randomKey, shape: randomShape, color: randomColor, angle: randomAngleValue },
         ]); //dataArr is the array of filled square box
       });
     }
+    console.log("dataArr", dataArr);
   }, [filledSelectorLength, captured, dataArr]);
 
   const lengthOfFirstChoice = 4; //lengthOfFirstChoice is the number of first choice
   const lengthOfSecondChoice = 6; //lengthOfSecondChoice is the number of second choice
   const lengthOfThirdChoice = 8; //lengthOfThirdChoice is the number of third choice
+  const [firstValidated, setFirstValidated] = useState(true); //firstValidated is the boolean value which is true when first choice is validated
+  const [secondValidated, setSecondValidated] = useState(true); //secondValidated is the boolean value which is true when second choice is validated
+  const [thirdValidated, setThirdValidated] = useState(true); //thirdValidated is the boolean value which is true when third choice is validated
+
 
   const [choiceKey, setChoiceKey] = useState([]); //choiceKey is the array of first choice
 
   useEffect(() => {
-    if (dataArr.length === filledSelectorLength) {
-      if (choiceKey.length < lengthOfFirstChoice) {
-        Array.from({ length: lengthOfFirstChoice }, (_, i) => {
-          //random key selection from dataArr array
-          let randomKeys = Math.floor(Math.random() * dataArr.length); //random key selection from dataArr array
+    if (dataArr.length === filledSelectorLength && firstValidated === true && secondValidated === true && thirdValidated === true) {
+      if (choiceKey.length === 0) {
+          let arr = [];
           {/* ramdom key selection from dataArr array when key is already exist in choiceKey array */}
-          while (choiceKey.some((item) => item === randomKeys)) {
-            randomKeys = Math.floor(Math.random() * dataArr.length);
-          }
+          do {
+            let randomKeys = Math.floor(Math.random() * dataArr.length);
+            arr = arr.indexOf(randomKeys) > -1 ? arr : arr.concat(randomKeys);
+          } while (arr.length < lengthOfFirstChoice);
 
+          console.log("arr", arr);
           {/*set choiceKey array with shape and color of random key selection from dataArr array */}
-          dataArr.map((item, index) => {
-            if (index === randomKeys) {
+          arr.map((a) => {
+            dataArr.map((item, index) => {
+            if (index === a) {
               if (item.shape === "triangle" && item.color === "red") {
-                setChoiceKey([...choiceKey, "triangle-red"]);
+                setChoiceKey((choiceKey) => [...choiceKey, "triangle-red"]);
               } else if (item.shape === "triangle" && item.color === "green") {
-                setChoiceKey([...choiceKey, "triangle-green"]);
+                setChoiceKey((choiceKey) => [...choiceKey, "triangle-green"]);
               } else if (item.shape === "triangle" && item.color === "blue") {
-                setChoiceKey([...choiceKey, "triangle-blue"]);
+                setChoiceKey((choiceKey) => [...choiceKey, "triangle-blue"]);
               } else if (item.shape === "circle" && item.color === "red") {
-                setChoiceKey([...choiceKey, "circle-red"]);
+                setChoiceKey((choiceKey) => [...choiceKey, "circle-red"]);
               } else if (item.shape === "circle" && item.color === "green") {
-                setChoiceKey([...choiceKey, "circle-green"]);
+                setChoiceKey((choiceKey) => [...choiceKey, "circle-green"]);
               } else if (item.shape === "circle" && item.color === "blue") {
-                setChoiceKey([...choiceKey, "circle-blue"]);
+                setChoiceKey((choiceKey) => [...choiceKey, "circle-blue"]);
               } else if (item.shape === "square" && item.color === "red") {
-                setChoiceKey([...choiceKey, "square-red"]);
+                setChoiceKey((choiceKey) => [...choiceKey, "square-red"]);
               } else if (item.shape === "square" && item.color === "green") {
-                setChoiceKey([...choiceKey, "square-green"]);
+                setChoiceKey((choiceKey) => [...choiceKey, "square-green"]);
               } else if (item.shape === "square" && item.color === "blue") {
-                setChoiceKey([...choiceKey, "square-blue"]);
-              }
+                setChoiceKey((choiceKey) => [...choiceKey, "square-blue"]);
+              } 
             }
           });
-        });
+          });
       }
     }
-  }, [dataArr, filledSelectorLength, choiceKey]);
+  }, [dataArr, filledSelectorLength, firstValidated, secondValidated, thirdValidated, choiceKey]);
+  // console.log("choiceKeyFirstValidation", choiceKey);
+  useEffect(() => {
+    if (dataArr.length === filledSelectorLength && firstValidated === false && secondValidated === true && thirdValidated === true) {
+      if (choiceKey.length === 0) {
+        let arr = [];
+        {/* ramdom key selection from dataArr array when key is already exist in choiceKey array */}
+        do {
+          let randomKeys = Math.floor(Math.random() * dataArr.length);
+          arr = arr.indexOf(randomKeys) > -1 ? arr : arr.concat(randomKeys);
+        } while (arr.length < lengthOfSecondChoice);
+
+        console.log("arr", arr);
+        {/*set choiceKey array with shape and color of random key selection from dataArr array */}
+        arr.map((a) => {
+          dataArr.map((item, index) => {
+          if (index === a) {
+            if (item.shape === "triangle" && item.color === "red") {
+              setChoiceKey((choiceKey) => [...choiceKey, "triangle-red"]);
+            } else if (item.shape === "triangle" && item.color === "green") {
+              setChoiceKey((choiceKey) => [...choiceKey, "triangle-green"]);
+            } else if (item.shape === "triangle" && item.color === "blue") {
+              setChoiceKey((choiceKey) => [...choiceKey, "triangle-blue"]);
+            } else if (item.shape === "circle" && item.color === "red") {
+              setChoiceKey((choiceKey) => [...choiceKey, "circle-red"]);
+            } else if (item.shape === "circle" && item.color === "green") {
+              setChoiceKey((choiceKey) => [...choiceKey, "circle-green"]);
+            } else if (item.shape === "circle" && item.color === "blue") {
+              setChoiceKey((choiceKey) => [...choiceKey, "circle-blue"]);
+            } else if (item.shape === "square" && item.color === "red") {
+              setChoiceKey((choiceKey) => [...choiceKey, "square-red"]);
+            } else if (item.shape === "square" && item.color === "green") {
+              setChoiceKey((choiceKey) => [...choiceKey, "square-green"]);
+            } else if (item.shape === "square" && item.color === "blue") {
+              setChoiceKey((choiceKey) => [...choiceKey, "square-blue"]);
+            } 
+          }
+        });
+        });
+    }
+  }
+  }, [dataArr, filledSelectorLength, choiceKey, secondValidated, firstValidated, thirdValidated]);
+
+  useEffect(() => {
+    if (dataArr.length === filledSelectorLength && firstValidated === false && secondValidated === false && thirdValidated === true) {
+      if (choiceKey.length === 0) {
+        let arr = [];
+        {/* ramdom key selection from dataArr array when key is already exist in choiceKey array */}
+        do {
+          let randomKeys = Math.floor(Math.random() * dataArr.length);
+          arr = arr.indexOf(randomKeys) > -1 ? arr : arr.concat(randomKeys);
+        } while (arr.length < lengthOfThirdChoice);
+        console.log("arr", arr);
+        {/*set choiceKey array with shape and color of random key selection from dataArr array */}
+        arr.map((a) => {
+          dataArr.map((item, index) => {
+          if (index === a) {
+            if (item.shape === "triangle" && item.color === "red") {
+              setChoiceKey((choiceKey) => [...choiceKey, "triangle-red"]);
+            } else if (item.shape === "triangle" && item.color === "green") {
+              setChoiceKey((choiceKey) => [...choiceKey, "triangle-green"]);
+            } else if (item.shape === "triangle" && item.color === "blue") {
+              setChoiceKey((choiceKey) => [...choiceKey, "triangle-blue"]);
+            } else if (item.shape === "circle" && item.color === "red") {
+              setChoiceKey((choiceKey) => [...choiceKey, "circle-red"]);
+            } else if (item.shape === "circle" && item.color === "green") {
+              setChoiceKey((choiceKey) => [...choiceKey, "circle-green"]);
+            } else if (item.shape === "circle" && item.color === "blue") {
+              setChoiceKey((choiceKey) => [...choiceKey, "circle-blue"]);
+            } else if (item.shape === "square" && item.color === "red") {
+              setChoiceKey((choiceKey) => [...choiceKey, "square-red"]);
+            } else if (item.shape === "square" && item.color === "green") {
+              setChoiceKey((choiceKey) => [...choiceKey, "square-green"]);
+            } else if (item.shape === "square" && item.color === "blue") {
+              setChoiceKey((choiceKey) => [...choiceKey, "square-blue"]);
+            } 
+          }
+        });
+        });
+    }
+  }
+  }, [dataArr, filledSelectorLength, choiceKey, thirdValidated, secondValidated, firstValidated]);
+
 
   const [shapeAndCount, setShapeAndCount] = useState([]); //shapeAndCount is the array of shape and count of shape
 
   {/* set shapeAndCount array with shape and count of shape store in this array */}
   useEffect(() => {
-    if (choiceKey.length === lengthOfFirstChoice) {
+    if (choiceKey.length === lengthOfFirstChoice && firstValidated === true) {
       let shapeAndCount = [];
       choiceKey.map((item) => {
         if (shapeAndCount.some((shape) => shape.shape === item)) {
@@ -101,15 +192,56 @@ export default function SquareSector({ captured, func, validation,validationData
         }
       });
       setShapeAndCount(shapeAndCount);
+      console.log("shapeAndCount", shapeAndCount);
     }
-  }, [choiceKey, lengthOfFirstChoice]);
+  }, [choiceKey, lengthOfFirstChoice, firstValidated]);
+
+  {/* set shapeAndCount array with shape and count of shape store in this array */}
+  useEffect(() => {
+    if (choiceKey.length === lengthOfSecondChoice && firstValidated === false && secondValidated === true) {
+      let shapeAndCount = [];
+      choiceKey.map((item) => {
+        if (shapeAndCount.some((shape) => shape.shape === item)) {
+          shapeAndCount.map((shape) => {
+            if (shape.shape === item) {
+              shape.count = shape.count + 1;
+            }
+          });
+        } else {
+          shapeAndCount.push({ shape: item, count: 1 });
+        }
+      });
+      setShapeAndCount(shapeAndCount);
+      console.log("shapeAndCount", shapeAndCount);
+    }
+  }, [choiceKey, lengthOfSecondChoice, secondValidated, firstValidated]);
+
+  {/* set shapeAndCount array with shape and count of shape store in this array */}
+  useEffect(() => {
+    if (choiceKey.length === lengthOfThirdChoice && firstValidated === false && secondValidated === false && thirdValidated === true) {
+      let shapeAndCount = [];
+      choiceKey.map((item) => {
+        if (shapeAndCount.some((shape) => shape.shape === item)) {
+          shapeAndCount.map((shape) => {
+            if (shape.shape === item) {
+              shape.count = shape.count + 1;
+            }
+          });
+        } else {
+          shapeAndCount.push({ shape: item, count: 1 }); 
+        }
+      });
+      setShapeAndCount(shapeAndCount);
+      console.log("shapeAndCount", shapeAndCount);
+    }
+  }, [choiceKey, lengthOfThirdChoice, thirdValidated, secondValidated, firstValidated]);
 
   func(shapeAndCount); //func is the function which is called when shapeAndCount array is changed
 
   const [selectedShapesArr, setSelectedShapesArr] = useState([]); //selectedShapesArr is the array of selected shape and color
 
-  const selectedShapes = (shape, color) => () => {
-    setSelectedShapesArr([...selectedShapesArr, { shape, color }]);
+  const selectedShapes = (key, shape, color) => () => {
+    setSelectedShapesArr([...selectedShapesArr, { key, shape, color }]);
   };
 
   const [selectedShapesMatch, setSelectedShapesMatch] = useState([]); 
@@ -129,28 +261,45 @@ export default function SquareSector({ captured, func, validation,validationData
         });
         setSelectedShapesMatch(selectedShapesMatch);
         setSelectedShapesNotMatch(selectedShapesNotMatch);
-        console.log('selectedShapesMatch', selectedShapesMatch);
-        console.log('selectedShapesNotMatch', selectedShapesNotMatch);
+        // console.log('selectedShapesMatch', selectedShapesMatch);
+        // console.log('selectedShapesNotMatch', selectedShapesNotMatch);
     }
-  }, [selectedShapesArr, choiceKey]);
-
+  }, [selectedShapesArr, choiceKey, lengthOfFirstChoice, lengthOfSecondChoice, lengthOfThirdChoice, firstValidated, secondValidated, thirdValidated]);
 
   useEffect(() => {
     if(validation === true) {
-      if (selectedShapesNotMatch.length > 0) {
+      if (choiceKey.length === lengthOfFirstChoice && lengthOfFirstChoice !== selectedShapesMatch.length || selectedShapesNotMatch.length > 0) {
+        setFirstValidated(false);
         validationData(false);
-        console.log('validationData', false);
-      } else if (selectedShapesMatch.length != choiceKey.length) {
-        validationData(true);
-        console.log('validationData', false);
+        setChoiceKey([]);
+      } else if (choiceKey.length === lengthOfSecondChoice && lengthOfSecondChoice !== selectedShapesMatch.length || selectedShapesNotMatch.length > 0) {
+        setSecondValidated(false);
+        validationData(false);
+        setChoiceKey([]);
+      } else if (choiceKey.length === lengthOfThirdChoice && lengthOfThirdChoice !== selectedShapesMatch.length || selectedShapesNotMatch.length > 0) {
+        setThirdValidated(false);
+        validationData("blocked");
+        setChoiceKey([]);
+        //current time + 2 minutes
+        let blockedTo = new Date();
+        blockedTo.setMinutes(blockedTo.getMinutes() + 2);
+        localStorage.setItem('blockedTo', blockedTo);
       } else {
         validationData(true);
-        console.log('validationData', true);
-      }
+      } 
+
+      setSelectedShapesArr([]);
+      setSelectedShapesMatch([]);
+      setSelectedShapesNotMatch([]);
+      setChoiceKey([]);
     }
-  }, [validation, selectedShapesNotMatch, validationData, selectedShapesMatch.length, choiceKey.length]);
+  }, [choiceKey.length, secondValidated, selectedShapesMatch.length, selectedShapesNotMatch.length, validation, validationData]);
 
-
+  useEffect(() => {
+    console.log('firstValidated', firstValidated);
+    console.log('secondValidated', secondValidated);
+    console.log('thirdValidated', thirdValidated);
+  }, [firstValidated, secondValidated, thirdValidated]);
 
   return (
     <div className="grid grid-cols-5 w-full h-full">
@@ -159,16 +308,17 @@ export default function SquareSector({ captured, func, validation,validationData
         .map((_, index) =>
           dataArr.some((item) => item.key === index) ? (
             <button
-            onClick={selectedShapes(dataArr.find((item) => item.key === index).shape, dataArr.find((item) => item.key === index).color)}
+            onClick={selectedShapes(dataArr.find((item) => item.key === index).key, dataArr.find((item) => item.key === index).shape, dataArr.find((item) => item.key === index).color)}
               key={index}
-              className="flex items-center justify-center w-full h-full border border-borderColor bg-secondaryColor bg-opacity-40 border-opacity-50 text-secondaryColor text-opacity-0 text-center"
+              disabled={dataArr.find((item) => item.key === selectedShapesArr.find((item) => item.key === index)?.key) ? true : false}
+              className="flex items-center justify-center w-full h-full border border-borderColor bg-secondaryColor bg-opacity-40 disabled:bg-disabled disabled:bg-opacity-70 border-opacity-50 text-secondaryColor text-opacity-0 text-center"
             >
               {dataArr.some(
                 (item) => item.key === index && item.shape === "triangle"
               ) ? (
                 // Triangle draw using div
                 <div
-                  className={`w-0 h-0 border-solid  border-l-12 border-r-12 border-b-20 border-opacity-60 ${
+                  className={`w-0 h-0 border-solid  border-l-12 border-r-12 border-b-20 border-opacity-80 transform rotate-${dataArr.find((item) => item.key === index).angle} ${
                     dataArr.find((item) => item.key === index).color === "red"
                       ? " border-b-red"
                       : dataArr.find((item) => item.key === index).color ===
@@ -182,7 +332,7 @@ export default function SquareSector({ captured, func, validation,validationData
                 ) ? (
                 // Circle draw using div
                 <div
-                  className={`w-1/2 h-1/2 rounded-full bg-opacity-60 ${
+                  className={`w-1/2 h-1/2 rounded-full bg-opacity-80 ${
                     dataArr.find((item) => item.key === index).color === "red"
                       ? " bg-red"
                       : dataArr.find((item) => item.key === index).color ===
@@ -196,7 +346,7 @@ export default function SquareSector({ captured, func, validation,validationData
                 ) ? (
                 // Square draw using div
                 <div
-                  className={`w-1/2 h-1/2 bg-opacity-60 ${
+                  className={`w-1/2 h-1/2 bg-opacity-80 transform rotate-${dataArr.find((item) => item.key === index).angle} ${
                     dataArr.find((item) => item.key === index).color === "red"
                       ? " bg-red"
                       : dataArr.find((item) => item.key === index).color ===

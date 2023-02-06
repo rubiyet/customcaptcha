@@ -21,6 +21,9 @@ module.exports = {
       red: "#ef4444",
       green: "#10b981",
       blue: "#3b82f6",
+      blockedColor: "#DD2424",
+      validatedColor: "#13BA61",
+      disabled : "#dbeafe",
     },
     borderWidth: {
       DEFAULT: "1px",
