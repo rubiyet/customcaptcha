@@ -1,7 +1,4 @@
 import { useEffect, useState } from "react"; //importing useState and useEffect from react
-import Circle from "./shapes/Circle"; //importing Circle from shapes folder
-import Square from "./shapes/Square."; //importing Square from shapes folder
-import Triangle from "./shapes/Triangle"; //importing Triangle from shapes folder
 
 export default function SquareSector({
   captured,
@@ -276,6 +273,7 @@ export default function SquareSector({
         }
       });
       setShapeAndCount(shapeAndCount);
+      console.log("shapeAndCount", shapeAndCount);
     }
   }, [choiceKey, lengthOfFirstChoice, firstValidated, secondValidated, thirdValidated, lengthOfSecondChoice, lengthOfThirdChoice]);
 
@@ -391,31 +389,50 @@ export default function SquareSector({
                   ? true
                   : false
               }
-              className="flex items-center justify-center w-full h-full border border-borderColor bg-secondaryColor bg-opacity-40 disabled:bg-disabled disabled:bg-opacity-70 border-opacity-50 text-secondaryColor text-opacity-0 text-center"
+              className="flex items-center justify-center w-full h-full border border-borderColor bg-secondaryColor bg-opacity-40 disabled:bg-disabled disabled:bg-opacity-70 border-opacity-50 text-secondaryColor text-opacity-100 text-center"
             >
               {dataArr.some(
                 (item) => item.key === index && item.shape === "triangle"
               ) ? (
                 // Triangle draw using div
-                <Triangle
-                  angle={dataArr.find((item) => item.key === index).angle}
-                  color={dataArr.find((item) => item.key === index).color}
-                />
+                <div
+                  className={`w-0 h-0 hover:-translate hover:scale-125 border-solid border-l-12 border-r-12 text-secondaryColor text-opacity-0 border-b-20 transform rotate-${dataArr.find((item) => item.key === index).angle} ${
+                    dataArr.find((item) => item.key === index).color === "red"
+                      ? " border-b-red"
+                      : dataArr.find((item) => item.key === index).color ===
+                        "green"
+                      ? " border-b-green"
+                      : " border-b-blue"
+                  }`}
+                ></div>
               ) : dataArr.some(
                   (item) => item.key === index && item.shape === "circle"
                 ) ? (
                 // Circle draw using div
-                <Circle
-                  color={dataArr.find((item) => item.key === index).color}
-                />
+                <div
+                  className={`w-1/2 h-1/2 hover:-translate hover:scale-125 rounded-full ${
+                    dataArr.find((item) => item.key === index).color === "red"
+                      ? " bg-red"
+                      : dataArr.find((item) => item.key === index).color ===
+                        "green"
+                      ? " bg-green"
+                      : " bg-blue"
+                  }`}
+                ></div>
               ) : dataArr.some(
                   (item) => item.key === index && item.shape === "square"
                 ) ? (
                 // Square draw using div
-                <Square
-                  angle={dataArr.find((item) => item.key === index).angle}
-                  color={dataArr.find((item) => item.key === index).color}
-                />
+                <div
+                  className={`w-1/2 h-1/2 hover:-translate hover:scale-125 transform rotate-${dataArr.find((item) => item.key === index).angle} ${
+                    dataArr.find((item) => item.key === index).color === "red"
+                      ? " bg-red"
+                      : dataArr.find((item) => item.key === index).color ===
+                        "green"
+                      ? " bg-green"
+                      : " bg-blue"
+                  }`}
+                ></div>
               ) : null}
             </button>
           ) : (
