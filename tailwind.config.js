@@ -23,7 +23,9 @@ module.exports = {
       blue: "#3b82f6",
       blockedColor: "#DD2424",
       validatedColor: "#13BA61",
-      disabled : "#dbeafe",
+      disabled : "#FFECB3",
+      lightBlue : "#0F8491",
+      shutterBg: "#CFD8DC",
     },
     borderWidth: {
       DEFAULT: "1px",
@@ -37,5 +39,7 @@ module.exports = {
       20: "20px",
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/line-clamp'),
+  ],
 }
