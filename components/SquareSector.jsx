@@ -273,7 +273,6 @@ export default function SquareSector({
         }
       });
       setShapeAndCount(shapeAndCount);
-      console.log("shapeAndCount", shapeAndCount);
     }
   }, [choiceKey, lengthOfFirstChoice, firstValidated, secondValidated, thirdValidated, lengthOfSecondChoice, lengthOfThirdChoice]);
 

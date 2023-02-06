@@ -145,15 +145,16 @@ export default function WebCam() {
     return words[number - 1];
   };
 
-  // useEffect(() => {
-  //   const handleContextmenu = (e) => {
-  //     e.preventDefault();
-  //   };
-  //   document.addEventListener("contextmenu", handleContextmenu);
-  //   return function cleanup() {
-  //     document.removeEventListener("contextmenu", handleContextmenu);
-  //   };
-  // }, []);
+  {/* useEffect to disable the right click */}
+  useEffect(() => {
+    const handleContextmenu = (e) => {
+      e.preventDefault();
+    };
+    document.addEventListener("contextmenu", handleContextmenu);
+    return function cleanup() {
+      document.removeEventListener("contextmenu", handleContextmenu);
+    };
+  }, []);
 
   const [delayText, setDelayText] = useState(false); //state to store the delayText value
 
@@ -365,7 +366,7 @@ export default function WebCam() {
                     <div className={`relative`}>
                       <div
                         style={unlockSquareStyle}
-                        className="w-24 h-24 md:w-52 md:h-52 border-2 border-borderColor border-opacity-40"
+                        className="w-24 h-24 md:w-52 md:h-52 border-2 border-borderColor border-opacity-40 select-none"
                       ></div>
                       <Webcam
                         ref={webcamRef} //reference to the webcam
