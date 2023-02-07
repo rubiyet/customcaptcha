@@ -24,11 +24,13 @@ After cloning the repo, first install [NEXT.JS](https://nextjs.org/docs/getting-
 cp path/to/repo
 npm install next react react-dom
 ```
+
 Install the dependencies with-
 
 ```bash
 npm install
 ```
+
 First, run the development server:
 
 ```bash
@@ -45,8 +47,8 @@ The validation flow for the CAPTCHA mechanism will consist of the following key 
   <img src="doc/assets/cameraWindow.png" width="" height="280" />
 </p>
 
-1. User Capture: The user will be prompted to capture a photo of themselves using the front-facing camera or webcam.</p>
-   
+1. User Capture: The user will be prompted to capture a photo of themselves using the front-facing camera or webcam.`</p>`
+
 <p align="center">
   <img src="doc/assets/shapeIdentificationWindow.png" width="" height="280" />
 </p>
@@ -77,6 +79,7 @@ NEXT_PUBLIC_LENGTHOFFIRSTCHOICE = 4
 NEXT_PUBLIC_LENGTHOFSECONDCHOICE = 6 
 NEXT_PUBLIC_LENGTHOFTHIRDCHOICE = 8 
 ```
+
 The NEXT_PUBLIC_BLOCKTIME value in the .env file determines the length of time that a user will be blocked if they fail to correctly identify the shapes within the three validation attempts. With a value of 2, this means that a user who fails the CAPTCHA will be blocked for 2 minutes. This value can be adjusted based on the specific requirements of the implementation.
 
 The NEXT_PUBLIC_SQUAREBOXSETINTERVAL value in the .env file determines the frequency at which the square-shaped area inside the video stream will change its position. With a value of 500, this means that the square-shaped area will change its position every 500 milliseconds (or 0.5 seconds). This value can be adjusted to determine the speed at which the area moves, and can be used to fine-tune the user experience and make the CAPTCHA more or less challenging.
@@ -86,22 +89,14 @@ The NEXT_PUBLIC_LENGTHOFFIRSTCHOICE, NEXT_PUBLIC_LENGTHOFSECONDCHOICE, and NEXT_
 ## Limitations
 
 1. Device Compatibility: The CAPTCHA mechanism may only work on devices that have a front-facing camera or webcam. This means that users who do not have this hardware may be unable to access the protected resource.
-
 2. User Experience: Some users may find the process of capturing a photo and identifying shapes to be intrusive or time-consuming. The user experience must be carefully considered to ensure that the CAPTCHA mechanism does not negatively impact the overall user experience.
-
 3. Privacy Concerns: While the photo taken by the user will not be stored and will only reside in the client-side, some users may still have concerns about their privacy. It is important to ensure that the privacy policy is clearly communicated to the users and that any privacy-sensitive information is protected.
-
 4. Reliance on Shapes: The CAPTCHA mechanism is reliant on the user's ability to identify shapes and colors. This may not be suitable for users with color blindness or visual impairments. An alternative mechanism may need to be considered to accommodate these users.
-
 5. Limited Attempts: The user only has three chances to pass the CAPTCHA, which may not be enough for some users. This limitation may need to be adjusted based on the specific needs of the implementation.
-   
 6. The CAPTCHA mechanism is the lack of automated testing due to time limitations. Automated testing is an important aspect of software development, as it helps to identify and resolve bugs and other issues before the software is released to users. However, due to time limitations, it may not have been possible to implement automated testing for the CAPTCHA mechanism.
 
-## Future Scope 
-1. The integration of live face detection into the CAPTCHA mechanism could significantly improve the security and user experience of the validation process. By leveraging the latest in biometric technologies, the CAPTCHA mechanism can provide a secure and user-friendly solution for protecting online resources. 
-   
-2. The current CAPTCHA mechanism relies on shape and color identification, but there are many other types of CAPTCHAs that can be implemented. These can include audio CAPTCHAs, mathematical CAPTCHAs, or even social media CAPTCHAs.
+## Future Scope
 
-3. The current CAPTCHA mechanism is optimized for desktop devices, but there is a growing need to optimize the CAPTCHA mechanism for mobile devices. This may involve adapting the shape and color identification process to be more suitable for smaller screens.
-
-4. The user experience could be further customized by allowing users to choose their preferred CAPTCHA type or even customize the shapes and colors used in the CAPTCHA mechanism.
+1. The video feed can be analyzed to detect a face. That will make sure the user is a human. Also the facial movement can be detected to identify authenticity of the user.
+2. Colors and shapes can be modified for color blind users.
+3. Automation tests can be performed to mitigate the edge cases.
