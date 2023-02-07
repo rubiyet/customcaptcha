@@ -64,7 +64,6 @@ The validation flow for the CAPTCHA mechanism will consist of the following key 
   <img class=mobile-image src="doc/assets/validatedResultWindow.png" height="200" width="250" /> 
   <img class=mobile-image src="doc/assets/resultWindow.png" height="200"  width="250"/> 
 </p>
-![alt-text-1](doc/assets/validatedResultWindow.png "title-1") ![alt-text-2](image2.png "title-2")
 
 1. Result: If the user successfully identifies the shapes within the three attempts, they will be granted access to the protected resource. If the user fails to correctly identify the shapes within the three attempts, they will be blocked for a certain time defined in the .env file.
 
