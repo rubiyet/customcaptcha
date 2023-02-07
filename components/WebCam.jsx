@@ -54,7 +54,7 @@ export default function WebCam() {
         left: `${unlockSquareRandomLeft}%`, //left value of the unlockSquare
         transition: "all 1s ease-linear", //transition of the unlockSquare
       });
-    }, process.env.NEXT_PUBLIC_SQUAREBOXSETINTERVAL ); //set the interval to 2 seconds
+    }, parseInt(process.env.NEXT_PUBLIC_SQUAREBOXSETINTERVAL) ); //set the interval to 2 seconds
 
     return () => clearInterval(squareInterval); //clear the interval
   }, [captured, unlockSquareRandomTop, unlockSquareRandomLeft]); //dependencies
