@@ -2,12 +2,11 @@
 
 ![NPM](https://img.shields.io/badge/NPM-%23CB3837.svg?style=for-the-badge&logo=npm&logoColor=white) ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white) ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white) ![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)
 
-<p style='text-align: justify;'>CAPTCHA, an acronym for Completely Automated Public Turing test to tell Computers and Humans Apart, is a commonly used security mechanism that aims to prevent automated systems from accessing protected resources. The goal of this project is to develop a new, user-friendly and interactive form of CAPTCHA that involves capturing a photo of the user.</p>
+CAPTCHA, an acronym for Completely Automated Public Turing test to tell Computers and Humans Apart, is a commonly used security mechanism that aims to prevent automated systems from accessing protected resources. The goal of this project is to develop a new, user-friendly and interactive form of CAPTCHA that involves capturing a photo of the user.
 
-<p style='text-align: justify;'>The CAPTCHA mechanism will prompt the user to capture a selfie using the front-facing camera or webcam. The photo will be processed locally on the client-side and will not be stored. A white square area will move randomly within the viewfinder window and once the picture has been taken, the white box will lock onto the still image. The user will then be asked to identify various shapes and colors displayed within the white box on a 5x5 grid. To pass the CAPTCHA, the user must correctly choose all of the shapes.</p>
+The CAPTCHA mechanism will prompt the user to capture a selfie using the front-facing camera or webcam. The photo will be processed locally on the client-side and will not be stored. A white square area will move randomly within the viewfinder window and once the picture has been taken, the white box will lock onto the still image. The user will then be asked to identify various shapes and colors displayed within the white box on a 5x5 grid. To pass the CAPTCHA, the user must correctly choose all of the shapes.
 
-<p style='text-align: justify;'>This approach provides a more engaging and interactive experience for users compared to traditional text-based or image-based CAPTCHAs.
-</p>
+This approach provides a more engaging and interactive experience for users compared to traditional text-based or image-based CAPTCHAs.
 
 ## Live Demo
 
@@ -65,7 +64,7 @@ The validation flow for the CAPTCHA mechanism will consist of the following key 
   <img class=mobile-image src="doc/assets/resultWindow.png" height="200"  width="250"/> 
 </p>
 
-1. Result: If the user successfully identifies the shapes within the three attempts, they will be granted access to the protected resource. If the user fails to correctly identify the shapes within the three attempts, they will be blocked for a certain time defined in the .env file.
+4. Result: If the user successfully identifies the shapes within the three attempts, they will be granted access to the protected resource. If the user fails to correctly identify the shapes within the three attempts, they will be blocked for a certain time defined in the .env file.
 
 It is important to note that this validation flow is designed to prevent automated systems from accessing protected resources while providing a user-friendly and interactive experience. The length of the block time can be adjusted based on the specific needs of the implementation.
 
@@ -78,17 +77,11 @@ NEXT_PUBLIC_LENGTHOFFIRSTCHOICE = 4
 NEXT_PUBLIC_LENGTHOFSECONDCHOICE = 6 
 NEXT_PUBLIC_LENGTHOFTHIRDCHOICE = 8 
 ```
-<p style='text-align: justify;'>
-  The NEXT_PUBLIC_BLOCKTIME value in the .env file determines the length of time that a user will be blocked if they fail to correctly identify the shapes within the three validation attempts. With a value of 2, this means that a user who fails the CAPTCHA will be blocked for 2 minutes. This value can be adjusted based on the specific requirements of the implementation.
-</p>
+The NEXT_PUBLIC_BLOCKTIME value in the .env file determines the length of time that a user will be blocked if they fail to correctly identify the shapes within the three validation attempts. With a value of 2, this means that a user who fails the CAPTCHA will be blocked for 2 minutes. This value can be adjusted based on the specific requirements of the implementation.
 
-<p style='text-align: justify;'>
-  The NEXT_PUBLIC_SQUAREBOXSETINTERVAL value in the .env file determines the frequency at which the square-shaped area inside the video stream will change its position. With a value of 500, this means that the square-shaped area will change its position every 500 milliseconds (or 0.5 seconds). This value can be adjusted to determine the speed at which the area moves, and can be used to fine-tune the user experience and make the CAPTCHA more or less challenging.
-</p>
+The NEXT_PUBLIC_SQUAREBOXSETINTERVAL value in the .env file determines the frequency at which the square-shaped area inside the video stream will change its position. With a value of 500, this means that the square-shaped area will change its position every 500 milliseconds (or 0.5 seconds). This value can be adjusted to determine the speed at which the area moves, and can be used to fine-tune the user experience and make the CAPTCHA more or less challenging.
 
-<p style='text-align: justify;'>
-  The NEXT_PUBLIC_LENGTHOFFIRSTCHOICE, NEXT_PUBLIC_LENGTHOFSECONDCHOICE, and NEXT_PUBLIC_LENGTHOFTHIRDCHOICE values in the .env file determine the number of shapes that the user will need to identify in each of the three validation attempts. With a value of 4 for NEXT_PUBLIC_LENGTHOFFIRSTCHOICE, the user will need to correctly identify 4 shapes in their first attempt at the CAPTCHA. If they fail, they will then be given a second attempt with 6 shapes to identify (as determined by NEXT_PUBLIC_LENGTHOFSECONDCHOICE with a value of 6). If they fail again, they will have one final attempt with 8 shapes to identify (as determined by NEXT_PUBLIC_LENGTHOFTHIRDCHOICE with a value of 8). These values can be adjusted to make the CAPTCHA more or less challenging, depending on the specific requirements of the implementation. By increasing the number of shapes to identify in each attempt, the CAPTCHA becomes more difficult and less susceptible to being bypassed by automated systems. Conversely, by decreasing the number of shapes, the CAPTCHA becomes easier and more user-friendly.
-</p>
+The NEXT_PUBLIC_LENGTHOFFIRSTCHOICE, NEXT_PUBLIC_LENGTHOFSECONDCHOICE, and NEXT_PUBLIC_LENGTHOFTHIRDCHOICE values in the .env file determine the number of shapes that the user will need to identify in each of the three validation attempts. With a value of 4 for NEXT_PUBLIC_LENGTHOFFIRSTCHOICE, the user will need to correctly identify 4 shapes in their first attempt at the CAPTCHA. If they fail, they will then be given a second attempt with 6 shapes to identify (as determined by NEXT_PUBLIC_LENGTHOFSECONDCHOICE with a value of 6). If they fail again, they will have one final attempt with 8 shapes to identify (as determined by NEXT_PUBLIC_LENGTHOFTHIRDCHOICE with a value of 8). These values can be adjusted to make the CAPTCHA more or less challenging, depending on the specific requirements of the implementation. By increasing the number of shapes to identify in each attempt, the CAPTCHA becomes more difficult and less susceptible to being bypassed by automated systems. Conversely, by decreasing the number of shapes, the CAPTCHA becomes easier and more user-friendly.
 
 ## Limitations
 
