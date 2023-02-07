@@ -61,21 +61,12 @@ The validation flow for the CAPTCHA mechanism will consist of the following key 
 3. Validation Attempts: The user will be given three chances to correctly identify the shapes and pass the CAPTCHA.
 
 <p align="center">
-  <img class=mobile-image src="doc/assets/validatedResultWindow.png" />
-  <img class=mobile-image src="doc/assets/resultWindow.png" />
+  <img class=mobile-image src="doc/assets/validatedResultWindow.png" height="200" width="250" /> 
+  <img class=mobile-image src="doc/assets/resultWindow.png" height="200"  width="250"/> 
 </p>
+![alt-text-1](doc/assets/validatedResultWindow.png "title-1") ![alt-text-2](image2.png "title-2")
 
-<style>
-  .img {
-    display: inline-block;
-  }
-  img.mobile-image {
-    width: 37%;
-    display: inline-block;
-  }
-</style>
-
-4. Result: If the user successfully identifies the shapes within the three attempts, they will be granted access to the protected resource. If the user fails to correctly identify the shapes within the three attempts, they will be blocked for a certain time defined in the .env file.
+1. Result: If the user successfully identifies the shapes within the three attempts, they will be granted access to the protected resource. If the user fails to correctly identify the shapes within the three attempts, they will be blocked for a certain time defined in the .env file.
 
 It is important to note that this validation flow is designed to prevent automated systems from accessing protected resources while providing a user-friendly and interactive experience. The length of the block time can be adjusted based on the specific needs of the implementation.
 
